@@ -18,7 +18,7 @@ const Home = () => {
 				<Card title="User Profile" component={<UserProfile></UserProfile>}></Card>
 				<Card title="All Item" component={<AllItem></AllItem>}></Card>
 				<Card title="Search Item" component={<SearchItem></SearchItem>}></Card>
-				<Card title="Carts & Favorite" component={<CartAndFavorite></CartAndFavorite>}></Card>
+				<Card title="Carts" component={<CartAndFavorite></CartAndFavorite>}></Card>
 				<Card title="Last Added Item" component={<LastAdded></LastAdded>}></Card>
 				<Card title="Add Item" component={<AddItem></AddItem>}></Card>
 				<Card title="Update Item" component={<UpdateItem></UpdateItem>}></Card>

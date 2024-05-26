@@ -39,7 +39,8 @@ const AuthProvider = ({children}) => {
 		return () => {
 			return userActivity();
 		}
-	}, []);
+	}, [user]);
+
 
 	const authCollection = {
 		user,

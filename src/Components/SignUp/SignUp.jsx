@@ -3,38 +3,62 @@ import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../Provider/AuthProvider';
 import Swal from 'sweetalert2';
+const imageUploadToken = import.meta.env.VITE_Image_Upload_Token;
 
 const SignUp = () => {
 	const { createUser, signIn, loading } = useContext(AuthContext);
 	const [error, setError] = useState('')
 	const { register, handleSubmit, watch, formState: { errors } } = useForm();
 	const navigate = useNavigate();
+	const imageUploadURL = `https://api.imgbb.com/1/upload?key=${imageUploadToken}`;
 	const onSubmit = data => {
-		console.log(data);
-		const { email, password, confirm_password } = data;
-		console.log(email)
+		const formData = new FormData();
+		formData.append('profile_picture', data.profile_picture[0])
+		const { email, password, confirm_password, first_name, last_name, phone_number, address, gender } = data;
+		console.log(data)
 		if (password !== confirm_password) {
 			setError('Password did not matched');
 			return;
 		}
 		createUser(email, password)
-			.then(user => {
+		.then(user => {
+				fetch(imageUploadURL, {
+					method: 'POST',
+					body: formData
+				})
+				.then(res => res.json())
+				.then(imgResponse => {
+					console.log(imgResponse)
+				})
 				signIn(email, password)
 					.then(user => {
-						Swal.fire({
-							position: "center",
-							icon: "success",
-							title: "Sign Up Successfully",
-							showConfirmButton: false,
-							timer: 1500
-						});
-						navigate('/');
+						const userData = { first_name, last_name, email, phone_number, address, gender, password }
+						fetch('http://localhost:2000/users', {
+							method: 'POST',
+							headers: {
+								'content-type': 'application/json'
+							},
+							body: JSON.stringify(userData)
+						})
+							.then(res => res.json())
+							.then(data => {
+								console.log(data)
+								if (data.insertedId) {
+								}
+							})
 					})
 					.catch(error => {
 						console.log(error.message);
 						setError(error.message);
 					})
-				alert('Sign up successfully')
+				Swal.fire({
+					position: "center",
+					icon: "success",
+					title: "Sign Up Successfully",
+					showConfirmButton: false,
+					timer: 1500
+				});
+				navigate('/');
 			})
 			.catch(error => {
 				console.log(error.message);
@@ -110,8 +134,9 @@ const SignUp = () => {
 					</div>
 				</div>
 				<div className='flex flex-col gap-2 text-base w-full'>
-					<label className='font-medium' htmlFor="Profile_Picture">Profile Picture</label>
-					<input className='border border-gray-300 px-2 py-1 rounded-xl outline-none' type="file" name='Profile_Picture' placeholder='Upload Image' />
+					<label className='font-medium' htmlFor="profile_picture">Profile Picture</label>
+					<input  {...register("profile_picture", { required: true })}
+					className='border border-gray-300 px-2 py-1 rounded-xl outline-none' type="file" name='profile_picture' placeholder='Upload Image' />
 				</div>
 				<div>
 					<p className='text-base font-medium'>Already have an account? <Link to="/signIn" className='text-[#F85559] cursor-pointer'>Sign in</Link></p>
