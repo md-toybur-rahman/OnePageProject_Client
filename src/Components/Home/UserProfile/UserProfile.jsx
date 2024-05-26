@@ -5,15 +5,6 @@ import { useQuery } from '@tanstack/react-query';
 const UserProfile = () => {
 	const { user } = useContext(AuthContext);
 	const [userData, setUserData] = useState({});
-	console.log(user.email);
-	// const { refetch, isLoading, isError, data: userData = [], error } = useQuery({
-	// 	queryKey: ['users', user?.email],
-	// 	queryFn: async () => {
-	// 		const res = await fetch(`http://localhost:2000/users?email=${user?.email}`)
-	// 		return res.json();
-	// 	}
-	// })
-	// console.log(userData)
 	useEffect(() => {
 		fetch(`http://localhost:2000/users?email=${user?.email}`)
 			.then(res => res.json())
@@ -22,7 +13,6 @@ const UserProfile = () => {
 			})
 	}, [])
 	const {first_name, last_name, email, phone_number, gender, address} = userData;
-	console.log(userData)
 	return (
 		<div>
 			<div className='flex justify-center'>

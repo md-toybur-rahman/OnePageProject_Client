@@ -14,7 +14,7 @@ const Home = () => {
 
 	return (
 		<div>
-			<div class="grid grid-cols-3 gap-4 my-8 text-white">
+			<div className="grid grid-cols-3 gap-4 my-8 text-white">
 				<Card title="User Profile" component={<UserProfile></UserProfile>}></Card>
 				<Card title="All Item" component={<AllItem></AllItem>}></Card>
 				<Card title="Search Item" component={<SearchItem></SearchItem>}></Card>

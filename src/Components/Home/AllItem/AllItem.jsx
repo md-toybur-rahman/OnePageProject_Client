@@ -1,37 +1,56 @@
 import { useQuery } from '@tanstack/react-query';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../../Provider/AuthProvider';
 import Swal from 'sweetalert2';
+import useCart from '../../../Hooks/useCart';
 
 const AllItem = () => {
-	const {user} = useContext(AuthContext);
-	const { refetch, isLoading, isError, data: items = [], error } = useQuery({
+	const { user } = useContext(AuthContext);
+	const [isCart, setIsCart] = useState(false);
+	const [, refetch] = useCart();
+	const { isLoading, isError, data: items = [], error } = useQuery({
 		queryKey: ['items'],
 		queryFn: async () => {
 			const res = await fetch('http://localhost:2000/items/')
 			return res.json();
 		}
 	})
-	console.log(items);
 	const handleCart = (item) => {
-		const cartItem = {fruitId: item._id, userEmail:user.email}
-		fetch('http://localhost:2000/carts/', {
-			method: 'POST',
-			headers: {
-				'content-type': 'application/json'
-			},
-			body: JSON.stringify(cartItem)
-		})
+		fetch(`http://localhost:2000/carts?email=${user?.email}`)
 			.then(res => res.json())
 			.then(data => {
-				if(data.insertedId) {
+				const filterData = data.filter(i => i.fruit_id == item._id);
+				if (filterData.length > 0) {
 					Swal.fire({
 						position: "top-right",
 						icon: "success",
-						title: "Item add to Cart",
+						title: "Item already added in Cart",
 						showConfirmButton: false,
 						timer: 1500
 					});
+				}
+				else {
+					const cartItem = { fruit: item, user_email: user.email }
+					fetch('http://localhost:2000/carts/', {
+						method: 'POST',
+						headers: {
+							'content-type': 'application/json'
+						},
+						body: JSON.stringify(cartItem)
+					})
+						.then(res => res.json())
+						.then(data => {
+							if (data.insertedId) {
+								refetch();
+								Swal.fire({
+									position: "top-right",
+									icon: "success",
+									title: "Item add to Cart",
+									showConfirmButton: false,
+									timer: 1500
+								});
+							}
+						})
 				}
 			})
 	}

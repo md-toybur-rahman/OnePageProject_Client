@@ -1,0 +1,10 @@
+{
+	"all_fruit": [
+		{"_id":"6639ace377d43db0a35b7303","name":"Banana","price":"0.5","rating":"4.2","category":"Fresh Fruit","description":"Sweet and creamy banana, great for smoothies.","imported_country":"Ecuador","available_quantity":"150","image_url":"https://example.com/banana.jpg"},
+		{"_id":"6639ace377d43db0a35b7303","name":"Banana","price":"0.5","rating":"4.2","category":"Fresh Fruit","description":"Sweet and creamy banana, great for smoothies.","imported_country":"Ecuador","available_quantity":"150","image_url":"https://example.com/banana.jpg"},
+		{"_id":"6639ace377d43db0a35b7306","name":"Strawberry","price":"3","rating":"4.6","category":"Fresh Fruit","description":"Sweet and succulent strawberries, ideal for desserts.","imported_country":"Mexico","available_quantity":"90","image_url":"https://example.com/strawberry.jpg"},
+		{"_id":"6639ace377d43db0a35b7308","name":"Watermelon","price":"5","rating":"4.7","category":"Fresh Fruit","description":"Juicy and refreshing watermelon, perfect for hot summer days.","imported_country":"United States","available_quantity":"60","image_url":"https://example.com/watermelon.jpg"},
+		{"_id":"6639ace377d43db0a35b730f","name":"Raspberry","price":"4.25","rating":"4.4","category":"Fresh Fruit","description":"Tart and flavorful raspberry, perfect for desserts or sauces.","imported_country":"Mexico","available_quantity":"100","image_url":"https://example.com/raspberry.jpg"},
+		{"_id":"6639ace377d43db0a35b730c","name":"Pear","price":"1.85","rating":"4.2","category":"Fresh Fruit","description":"Sweet and crisp pear, great for salads or as a healthy snack.","imported_country":"China","available_quantity":"90","image_url":"https://example.com/pear.jpg"}
+	]
+}

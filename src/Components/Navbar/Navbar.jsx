@@ -19,11 +19,11 @@ const Navbar = () => {
 			})
 	}
 	return (
-		<div class="navbar bg-blue-100">
-			<div class="flex-1">
+		<div className="navbar bg-blue-100">
+			<div className="flex-1">
 				<h1 className='text-black font-bold text-2xl cursor-none'>⭕ne Page</h1>
 			</div>
-			<div class="flex items-center gap-5">
+			<div className="flex items-center gap-5">
 				<div className="bg-[url('https://media.licdn.com/dms/image/D4D03AQG5CmsynJxUDg/profile-displayphoto-shrink_800_800/0/1713860584163?e=2147483647&v=beta&t=751B-oUARgTB_7wlfsezqtFrh3EQrWG6kTn-S72_CwI')] h-14 w-14 bg-cover rounded-full"></div>
 				<button onClick={handleLogOut} className='border-2 border-black text-black px-4 py-1 rounded-xl font-medium text-lg'>Logout</button>
 			</div>

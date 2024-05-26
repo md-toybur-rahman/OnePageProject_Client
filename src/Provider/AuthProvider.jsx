@@ -41,7 +41,6 @@ const AuthProvider = ({children}) => {
 		}
 	}, [user]);
 
-
 	const authCollection = {
 		user,
 		loading,
