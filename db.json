@@ -1,6 +1,6 @@
 {
 	"all_fruit": [
-		{"_id":"6639ace377d43db0a35b7303","name":"Banana","price":"0.5","rating":"4.2","category":"Fresh Fruit","description":"Sweet and creamy banana, great for smoothies.","imported_country":"Ecuador","available_quantity":"150","image_url":"https://example.com/banana.jpg"},
+		{"_id":"6639ace377d43db0a35b7303","name":"Apple","price":"0.5","rating":"4.2","category":"Fresh Fruit","description":"Sweet and creamy banana, great for smoothies.","imported_country":"Ecuador","available_quantity":"150","image_url":"https://example.com/banana.jpg"},
 		{"_id":"6639ace377d43db0a35b7303","name":"Banana","price":"0.5","rating":"4.2","category":"Fresh Fruit","description":"Sweet and creamy banana, great for smoothies.","imported_country":"Ecuador","available_quantity":"150","image_url":"https://example.com/banana.jpg"},
 		{"_id":"6639ace377d43db0a35b7306","name":"Strawberry","price":"3","rating":"4.6","category":"Fresh Fruit","description":"Sweet and succulent strawberries, ideal for desserts.","imported_country":"Mexico","available_quantity":"90","image_url":"https://example.com/strawberry.jpg"},
 		{"_id":"6639ace377d43db0a35b7308","name":"Watermelon","price":"5","rating":"4.7","category":"Fresh Fruit","description":"Juicy and refreshing watermelon, perfect for hot summer days.","imported_country":"United States","available_quantity":"60","image_url":"https://example.com/watermelon.jpg"},

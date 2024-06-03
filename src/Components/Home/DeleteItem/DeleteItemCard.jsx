@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Swal from 'sweetalert2';
+import useAllItem from '../../../Hooks/useAllItem';
+import { SearchContext } from '../../../Provider/SearchProvider';
 
-const CartCard = ({ item, refetch }) => {
-	const { _id, fruit } = item;
-	const { name } = fruit;
+const DeleteItemCard = (props) => {
+	const item = props.item;
+	const { name, _id } = item;
+	const [, refetch] = useAllItem();
+	const { deleteSearchItem, setDeleteSearchItem } = useContext(SearchContext);
 	const handleDelete = (id) => {
 		Swal.fire({
 			title: "Are you sure?",
@@ -15,18 +19,20 @@ const CartCard = ({ item, refetch }) => {
 			confirmButtonText: "Yes, delete it!"
 		}).then((result) => {
 			if (result.isConfirmed) {
-				fetch(`http://localhost:2000/carts?id=${id}`, {
-					method: 'DELETE',
+				fetch(`http://localhost:2000/items?id=${id}`, {
+					method: 'DELETE'
 				})
 					.then(res => res.json())
 					.then(data => {
-						if (data.deletedCount > 0) {
+						const filterRemainItem = deleteSearchItem.filter(item => item._id != id) ;
+						setDeleteSearchItem(filterRemainItem);
+						if (data.acknowledged) {
+							refetch();
 							Swal.fire({
 								title: "Deleted!",
 								text: "Your file has been deleted.",
 								icon: "success"
 							});
-							refetch();
 						}
 					})
 			}
@@ -47,4 +53,4 @@ const CartCard = ({ item, refetch }) => {
 	);
 };
 
-export default CartCard;
+export default DeleteItemCard;

@@ -1,3 +1,56 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.css-13cymwt-control{
+	background-color: transparent !important;
+	color: white !important;
+	border-radius: 12px !important;
+	min-height: 30px !important;
+	
+}
+.css-t3ipsp-control{
+	background-color: transparent !important;
+	color: white !important;
+}
+.css-w9q2zk-Input2{
+	color: white !important;
+	padding-top: 0 !important;
+	padding-bottom: 0 !important;
+	margin: 0 2px !important;
+}
+.css-w9q2zk-Input2{
+	padding: 0 8px !important;
+}
+.css-1xc3v61-indicatorContainer{
+	padding: 0 8px !important;
+}
+.css-4xgw5l-IndicatorsContainer2{
+	height: 34px !important;
+}
+.css-art2ul-ValueContainer2{
+	padding: 0 8px !important;
+}
+
+.height-transition {
+    transition: height .5s ease;
+}
+
+.height-0 {
+    height: 0;
+}
+
+.height-full {
+    height: 180px;
+}
+
+/* Hide scrollbar for WebKit browsers */
+.no-scrollbar::-webkit-scrollbar {
+	display: none;
+  }
+  
+  /* Hide scrollbar for IE, Edge */
+  .no-scrollbar {
+	-ms-overflow-style: none;  /* IE and Edge */
+	scrollbar-width: none;  /* Firefox */
+  }

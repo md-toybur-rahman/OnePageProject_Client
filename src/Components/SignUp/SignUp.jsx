@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 const imageUploadToken = import.meta.env.VITE_Image_Upload_Token;
 
 const SignUp = () => {
-	const { createUser, signIn, loading } = useContext(AuthContext);
+	const { createUser, signIn, loading, googleSignIn } = useContext(AuthContext);
 	const [error, setError] = useState('')
 	const { register, handleSubmit, watch, formState: { errors } } = useForm();
 	const navigate = useNavigate();
@@ -15,21 +15,12 @@ const SignUp = () => {
 		const formData = new FormData();
 		formData.append('profile_picture', data.profile_picture[0])
 		const { email, password, confirm_password, first_name, last_name, phone_number, address, gender } = data;
-		console.log(data)
 		if (password !== confirm_password) {
 			setError('Password did not matched');
 			return;
 		}
 		createUser(email, password)
-		.then(user => {
-				fetch(imageUploadURL, {
-					method: 'POST',
-					body: formData
-				})
-				.then(res => res.json())
-				.then(imgResponse => {
-					console.log(imgResponse)
-				})
+			.then(user => {
 				signIn(email, password)
 					.then(user => {
 						const userData = { first_name, last_name, email, phone_number, address, gender, password }
@@ -43,7 +34,18 @@ const SignUp = () => {
 							.then(res => res.json())
 							.then(data => {
 								console.log(data)
-								if (data.insertedId) {
+								if (data.status == "success") {
+									fetch('http://localhost:2000/jwt', {
+										method: 'POST',
+										headers: {
+											'content-type': 'application/json'
+										},
+										body: JSON.stringify(data.email)
+									})
+										.then(res => res.json())
+										.then(data => {
+											localStorage.setItem('token', JSON.stringify(data.token));
+										})
 								}
 							})
 					})
@@ -65,6 +67,47 @@ const SignUp = () => {
 				setError(error.message);
 			})
 	};
+	const hanldeGoogleSignUp = () => {
+		googleSignIn()
+			.then(data => {
+				const user = data.user;
+				const userData = { first_name: data._tokenResponse.firstName, lastName: data._tokenResponse.lastName, email: user.email, phone_number: user.phoneNumber, login_from: data.providerId }
+				if (data.providerId === 'google.com') {
+					fetch('http://localhost:2000/users', {
+						method: 'POST',
+						headers: {
+							'content-type': 'application/json'
+						},
+						body: JSON.stringify(userData)
+					})
+						.then(res => res.json())
+						.then(data => {
+							console.log(data)
+							if (data.status == 'success') {
+								fetch('http://localhost:2000/jwt', {
+									method: 'POST',
+									headers: {
+										'content-type': 'application/json'
+									},
+									body: JSON.stringify(data.email)
+								})
+									.then(res => res.json())
+									.then(data => {
+										localStorage.setItem('token', JSON.stringify(data.token));
+									})
+							}
+						})
+					Swal.fire({
+						position: "center",
+						icon: "success",
+						title: "Sign Up Successfully",
+						showConfirmButton: false,
+						timer: 1500
+					});
+					navigate('/');
+				}
+			})
+	}
 	return (
 		<div>
 			<h1 className='text-3xl font-bold mt-20 mb-5 text-center'>Sign Up</h1>
@@ -84,7 +127,7 @@ const SignUp = () => {
 				<div className='grid grid-cols-1 md:grid-cols-2 gap-6 w-full'>
 					<div className='flex flex-col gap-2 text-base'>
 						<label className='font-medium' htmlFor="email">Email</label>
-						<input {...register("email", { required: true })} className='border border-gray-300 px-2 py-1 rounded-xl outline-none' type="text" name='email' placeholder='Enter your Email' />
+						<input {...register("email", { required: true })} className='border border-gray-300 px-2 py-1 rounded-xl outline-none' type="email" name='email' placeholder='Enter your Email' />
 						{errors.email && <span className="text-sm text-red-500">This field is required *</span>}
 					</div>
 					<div className='flex flex-col gap-2 text-base'>
@@ -118,7 +161,7 @@ const SignUp = () => {
 								maxLength: 20,
 								pattern: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,}$/
 							})}
-							className='border border-gray-300 px-2 py-1 rounded-xl outline-none' type="text" name='password' placeholder='Enter your Password' />
+							className='border border-gray-300 px-2 py-1 rounded-xl outline-none' type="password" name='password' placeholder='Enter your Password' />
 						{errors.password?.type === 'required' && <span className="text-sm text-red-500">This field is required *</span>}
 						{errors.password?.type === 'minLength' && <span className="text-sm text-red-500">Password contain minimum 6 charecters</span>}
 						{errors.password?.type === 'maxLength' && <span className="text-sm text-red-500">Password contain maximum 20 charecters</span>}
@@ -136,14 +179,14 @@ const SignUp = () => {
 				<div className='flex flex-col gap-2 text-base w-full'>
 					<label className='font-medium' htmlFor="profile_picture">Profile Picture</label>
 					<input  {...register("profile_picture", { required: true })}
-					className='border border-gray-300 px-2 py-1 rounded-xl outline-none' type="file" name='profile_picture' placeholder='Upload Image' />
+						className='border border-gray-300 px-2 py-1 rounded-xl outline-none' type="file" name='profile_picture' placeholder='Upload Image' />
 				</div>
 				<div>
 					<p className='text-base font-medium'>Already have an account? <Link to="/signIn" className='text-[#F85559] cursor-pointer'>Sign in</Link></p>
 				</div>
 				<div className='flex items-center gap-5 mt-5'>
 					<p className='text-base font-semibold text-gray-500'>Sign up with</p>
-					<div className='cursor-pointer w-6 h-6'>
+					<div onClick={hanldeGoogleSignUp} className='cursor-pointer w-6 h-6'>
 						<img className='w-full h-full' src="google.png" alt="" />
 					</div>
 				</div>

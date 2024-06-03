@@ -9,6 +9,7 @@ const Navbar = () => {
 	const handleLogOut = () => {
 		logOut()
 			.then(() => {
+				localStorage.removeItem('token');
 				Swal.fire({
 					position: "center",
 					title: "Now You Can't Enter Into The Main Page",

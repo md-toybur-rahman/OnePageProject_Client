@@ -5,7 +5,7 @@ import Swal from 'sweetalert2';
 import { useForm } from 'react-hook-form';
 
 const SignIn = () => {
-	const { signIn } = useContext(AuthContext);
+	const { signIn, googleSignIn } = useContext(AuthContext);
 	const [error, setError] = useState('');
 	const navigate = useNavigate();
 	const { register, handleSubmit, watch, formState: { errors } } = useForm();
@@ -13,15 +13,74 @@ const SignIn = () => {
 	const onSubmit = data => {
 		const { email, password } = data;
 		signIn(email, password)
-			.then(user => {
-				Swal.fire({
-					position: "center",
-					icon: "success",
-					title: "Sign In Successfully",
-					showConfirmButton: false,
-					timer: 1500
-				});
+			.then(data => {
+				const userData = { email }
+				fetch('http://localhost:2000/jwt', {
+					method: 'POST',
+					headers: {
+						'content-type': 'application/json'
+					},
+					body: JSON.stringify(userData)
+				})
+					.then(res => res.json())
+					.then(data => {
+						console.log(data)
+						if (data.status == 'success') {
+							console.log(data)
+							localStorage.setItem('token', JSON.stringify(data.token));
+							Swal.fire({
+								position: "center",
+								icon: "success",
+								title: "Sign In Successfully",
+								showConfirmButton: false,
+								timer: 1500
+							});
+						}
+					})
 				navigate('/')
+			})
+	}
+	const handleGoogleSignIn = () => {
+		googleSignIn()
+			.then(data => {
+				const user = data.user;
+				const userData = { first_name: data._tokenResponse.firstName, lastName: data._tokenResponse.lastName, email: user.email, phone_number: user.phoneNumber, login_from: data.providerId }
+				if (data.providerId === 'google.com') {
+					fetch('http://localhost:2000/users', {
+						method: 'POST',
+						headers: {
+							'content-type': 'application/json'
+						},
+						body: JSON.stringify(userData)
+					})
+						.then(res => res.json())
+						.then(data => {
+							console.log(data)
+							if (data.status == 'success') {
+								fetch('http://localhost:2000/jwt', {
+									method: 'POST',
+									headers: {
+										'content-type': 'application/json'
+									},
+									body: JSON.stringify({ email: data.email })
+								})
+									.then(res => res.json())
+									.then(data => {
+										localStorage.setItem('token', JSON.stringify(data.token));
+										navigate('/');
+										Swal.fire({
+											position: "center",
+											icon: "success",
+											title: "Sign In Successfully",
+											showConfirmButton: false,
+											timer: 1500
+										});
+									})
+							}
+						})
+
+				}
+
 			})
 	}
 	return (
@@ -31,7 +90,7 @@ const SignIn = () => {
 				<div className='grid grid-cols-1 gap-6 w-full'>
 					<div className='flex flex-col gap-2 text-base'>
 						<label className='font-medium' htmlFor="email">Email</label>
-						<input {...register("email", { required: true })} className='border border-gray-300 px-2 py-1 rounded-xl outline-none' type="text" name='email' placeholder='Enter your Email' />
+						<input {...register("email", { required: true })} className='border border-gray-300 px-2 py-1 rounded-xl outline-none' type="email" name='email' placeholder='Enter your Email' />
 						{errors.email && <span className="text-sm text-red-500">This field is required *</span>}
 					</div>
 				</div>
@@ -47,7 +106,7 @@ const SignIn = () => {
 				</div>
 				<div className='flex items-center gap-10 mt-5'>
 					<p className='text-base font-semibold text-gray-500'>Sign in with</p>
-					<div className='cursor-pointer w-6 h-6'>
+					<div onClick={handleGoogleSignIn} className='cursor-pointer w-6 h-6'>
 						<img className='w-full h-full' src="google.png" alt="" />
 					</div>
 				</div>
