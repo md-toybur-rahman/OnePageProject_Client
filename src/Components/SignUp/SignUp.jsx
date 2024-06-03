@@ -40,11 +40,19 @@ const SignUp = () => {
 										headers: {
 											'content-type': 'application/json'
 										},
-										body: JSON.stringify(data.email)
+										body: JSON.stringify({ email: data.email })
 									})
 										.then(res => res.json())
 										.then(data => {
 											localStorage.setItem('token', JSON.stringify(data.token));
+											navigate('/');
+											Swal.fire({
+												position: "center",
+												icon: "success",
+												title: "Sign Up Successfully",
+												showConfirmButton: false,
+												timer: 1500
+											});
 										})
 								}
 							})
@@ -53,14 +61,7 @@ const SignUp = () => {
 						console.log(error.message);
 						setError(error.message);
 					})
-				Swal.fire({
-					position: "center",
-					icon: "success",
-					title: "Sign Up Successfully",
-					showConfirmButton: false,
-					timer: 1500
-				});
-				navigate('/');
+
 			})
 			.catch(error => {
 				console.log(error.message);
@@ -89,22 +90,22 @@ const SignUp = () => {
 									headers: {
 										'content-type': 'application/json'
 									},
-									body: JSON.stringify(data.email)
+									body: JSON.stringify({ email: data.email })
 								})
 									.then(res => res.json())
 									.then(data => {
 										localStorage.setItem('token', JSON.stringify(data.token));
+										navigate('/');
+										Swal.fire({
+											position: "center",
+											icon: "success",
+											title: "Sign Up Successfully",
+											showConfirmButton: false,
+											timer: 1500
+										});
 									})
 							}
 						})
-					Swal.fire({
-						position: "center",
-						icon: "success",
-						title: "Sign Up Successfully",
-						showConfirmButton: false,
-						timer: 1500
-					});
-					navigate('/');
 				}
 			})
 	}
